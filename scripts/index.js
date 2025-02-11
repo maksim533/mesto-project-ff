@@ -8,22 +8,24 @@
 
 // @todo: Вывести карточки на страницу
 
-const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
 
+function card (arr){
+  const cardTemplate = document.querySelector('#card-template').content;
+  const cardClone = cardTemplate.querySelector('.card').cloneNode(true);
+  cardClone.querySelector('.card__image').src = arr.link;
+  cardClone.querySelector('.card__image').alt = arr.name;
+  cardClone.querySelector('.card__title').textContent = arr.name;
+  const deleteCards = cardClone.querySelector('.card__delete-button');
+  deleteCards.addEventListener('click', deleteCard);
+  return cardClone;
+}
 
-initialCards.forEach(function (item) {
-    const cardTemplateClone = cardTemplate.querySelector('.card').cloneNode(true);
-    cardTemplateClone.querySelector('.card__image').src = item.link;
-    cardTemplateClone.querySelector('.card__title').textContent = item.name;
-    cardList.append(cardTemplateClone);
-  }
-)
+function deleteCard () {
+  const cardDelete = document.querySelector('.card');
+  cardDelete.remove();
+}
 
-const buttonsDelete = document.querySelectorAll('.card__delete-button');
-buttonsDelete.forEach(function (element){
-  element.addEventListener('click', function () {
-    const card = document.querySelector('.card');
-    card.remove();
-  })
+initialCards.map(card).forEach(function (item) {
+  cardList.append(item);
 })
