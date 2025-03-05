@@ -1,32 +1,17 @@
-import { cardList, newPlace } from "./index.js";
-import { openModal } from "./modal";
+const cardTemplate = document.querySelector("#card-template").content;
+const cardList = document.querySelector(".places__list");
 
-function createCard(cardData) {
-  const cardTemplate = document.querySelector("#card-template").content;
+
+function createCard(item, deleteCard, toggleLike, clickToImg) {
   const cardClone = cardTemplate.querySelector(".card").cloneNode(true);
-  cardClone.querySelector(".card__image").src = cardData.link;
-  cardClone.querySelector(".card__image").alt = cardData.name;
-  cardClone.querySelector(".card__title").textContent = cardData.name;
+  cardClone.querySelector(".card__image").src = item.link;
+  cardClone.querySelector(".card__image").alt = item.name;
+  cardClone.querySelector(".card__title").textContent = item.name;
   const buttonDeleteCard = cardClone.querySelector(".card__delete-button");
   buttonDeleteCard.addEventListener("click", deleteCard);
-  cardList.addEventListener("click", cardLike);
+  cardList.addEventListener("click", toggleLike);
   cardClone.addEventListener("click", clickToImg);
   return cardClone;
-}
-
-function addCard(evt) {
-  evt.preventDefault();
-  const create = [
-    {
-      link: document.querySelector(".popup__input_type_url").value,
-      name: document.querySelector(".popup__input_type_card-name").value,
-    },
-  ];
-  create.forEach(function (item) {
-    const card = createCard(item, deleteCard, cardLike, clickToImg);
-    cardList.prepend(card);
-  });
-  newPlace.reset();
 }
 
 function deleteCard(evt) {
@@ -34,20 +19,10 @@ function deleteCard(evt) {
   cardDelete.remove();
 }
 
-function cardLike(evt) {
+function toggleLike(evt) {
   if (evt.target.classList.contains("card__like-button")) {
     evt.target.classList.toggle("card__like-button_is-active");
   }
 }
 
-function clickToImg(evt) {
-  if (evt.target.classList.contains("card__image")) {
-    const popupImage = document.querySelector(".popup__image");
-    const popupCaption = document.querySelector(".popup__caption");
-    popupImage.src = evt.target.src;
-    popupCaption.textContent = evt.target.alt;
-    openModal(document.querySelector(".popup_type_image"));
-  }
-}
-
-export { createCard, deleteCard, addCard, cardLike, clickToImg };
+export { createCard, deleteCard, toggleLike, cardList, cardTemplate };
