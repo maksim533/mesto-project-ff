@@ -4,7 +4,6 @@ import { openModal, closeModal } from "./modal";
 import {
   createCard,
   toggleLike,
-  deleteCard,
   cardList,
   cardTemplate,
 } from "./card";
