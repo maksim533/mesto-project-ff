@@ -904,6 +904,7 @@ template {
 
 .popup__error_visible {
   color: #FF0000;
+  font-size: 12px;
 }
 
 @media screen and (max-width: 568px) {
@@ -930,8 +931,8 @@ template {
 }
 
 .popup__button_disabled {
-  border: 1px solid rgba(0, 0, 0, 1);
-  color: rgba(0, 0, 0, 1);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.15);
   background-color: transparent;
 }
 
