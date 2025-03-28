@@ -20,6 +20,7 @@
 
 .popup__error_visible {
   color: #FF0000;
+  font-size: 12px;
 }
 
 @media screen and (max-width: 568px) {

@@ -1,12 +1,7 @@
 import "../pages/index.css";
 import { initialCards } from "./cards";
 import { openModal, closeModal } from "./modal";
-import {
-  createCard,
-  toggleLike,
-  cardList,
-  cardTemplate,
-} from "./card";
+import { createCard, toggleLike, cardList, cardTemplate } from "./card";
 import { enableValidation, clearValidation } from "./validation";
 import {
   getIdUsersInfo,
@@ -14,11 +9,10 @@ import {
   patchUserInfo,
   postAddCard,
   patchEditUserAvatar,
-  deleteCards
+  deleteCards,
 } from "./api";
 
 // @todo: Темплейт карточки
-
 
 // @todo: Функция удаления карточки
 
@@ -102,7 +96,6 @@ const profileDescription = document.querySelector(".profile__description");
 
 const formAddCard = document.forms["new-place"];
 
-
 // форма изменения аватара
 
 const formEditAvatar = document.forms["edit-avatar"];
@@ -119,42 +112,46 @@ const profileEditAvatarButton = document.querySelector(
 
 // попап удаления
 
-const popupTypeDelete = document.querySelector('.popup_type_delete');
+const popupTypeDelete = document.querySelector(".popup_type_delete");
 
-// кнопка подтверждения удаления попапа 
+// кнопка подтверждения удаления попапа
 
-const popupButton = popupTypeDelete.querySelector('.popup__button');
+const popupButtonDeleteCard = popupTypeDelete.querySelector(".popup__button");
 
 let popupCardId;
- 
+
 let cardDelete;
 
 let userId;
 
-function popapShowDeleteCard (evt, cardId) {
+function popapShowDeleteCard(evt, cardId) {
   evt.preventDefault();
   popupCardId = cardId;
   cardDelete = evt.target.closest(".card");
-  if(evt.target.classList.contains('card__delete-button')){
+  if (evt.target.classList.contains("card__delete-button")) {
     openModal(popupTypeDelete);
   }
 }
 
-function popupCloseDeleteCard (evt, cardId, cardDelete) {
+function popupCloseDeleteCard(evt, cardId, cardDelete) {
   evt.preventDefault();
   deleteCards(cardId)
-  .catch((err) => console.log(err));
-  cardDelete.remove();
-  closeModal(popupTypeDelete);
+    .then(() => {
+      cardDelete.remove();
+      closeModal(popupTypeDelete);
+    })
+    .catch((err) => console.log(err));
 }
 
-popupButton.addEventListener('click', (evt) => popupCloseDeleteCard(evt, popupCardId, cardDelete))
+popupButtonDeleteCard.addEventListener("click", (evt) =>
+  popupCloseDeleteCard(evt, popupCardId, cardDelete)
+);
 
 profileEditAvatarButton.addEventListener("click", function () {
   clearValidation(formEditAvatar, validationConfig);
+  formEditAvatar.reset();
   openModal(popupEditAvatar);
 });
-
 
 const isLoading = (boolean, selector) => {
   if (boolean) {
@@ -164,7 +161,7 @@ const isLoading = (boolean, selector) => {
   }
 };
 
-formEditAvatar.addEventListener("submit", function (evt) {
+formEditAvatar.addEventListener("submit", (evt) => {
   evt.preventDefault();
   const formEditAvatarLink = formEditAvatar.querySelector(
     ".popup__input_type_url"
@@ -172,14 +169,14 @@ formEditAvatar.addEventListener("submit", function (evt) {
   isLoading(true, formEditAvatar.querySelector(".popup__button"));
   patchEditUserAvatar(formEditAvatarLink.value)
     .then((res) => {
-      popupImage.style.backgroundImage = `url(${res.avatar})`;
+      profileImage.style.backgroundImage = `url(${res.avatar})`;
+      formEditAvatar.reset();
+      closeModal(popupEditAvatar);
     })
     .catch((err) => console.log(err))
     .finally(() => {
       isLoading(false, formEditAvatar.querySelector(".popup__button"));
     });
-  formEditAvatar.reset();
-  closeModal(popupEditAvatar);
 });
 
 function addCard(evt) {
@@ -197,13 +194,13 @@ function addCard(evt) {
         clickToImg
       );
       cardList.prepend(card);
+      formAddCard.reset();
+      closeModal(popupTypeNewCard);
     })
     .catch((err) => console.log(err))
     .finally(() => {
       isLoading(false, formAddCard.querySelector(".popup__button"));
     });
-  formAddCard.reset();
-  closeModal(popupTypeNewCard);
 }
 
 profileEditButton.addEventListener("click", function () {
@@ -215,6 +212,7 @@ profileEditButton.addEventListener("click", function () {
 
 profileAddButton.addEventListener("click", function () {
   clearValidation(formAddCard, validationConfig);
+  formAddCard.reset();
   openModal(popupTypeNewCard);
 });
 
@@ -249,12 +247,12 @@ function submitEditProfileForm(evt) {
     .then((userUpdate) => {
       profileTitle.textContent = userUpdate.name;
       profileDescription.textContent = userUpdate.about;
+      closeModal(popupTypeEdit);
     })
     .catch((err) => console.log(err))
     .finally(() => {
       isLoading(false, formEditProfile.querySelector(".popup__button"));
     });
-  closeModal(popupTypeEdit);
 }
 
 Promise.all([getIdUsersInfo(), getCards()])

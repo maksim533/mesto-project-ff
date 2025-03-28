@@ -36,7 +36,7 @@ function createCard(
 }
 
 function toggleLike(evt, userId) {
-  const likeAmount = evt.target.querySelector(".card__like-amount");
+  const likeAmount = evt.target.parentNode.querySelector(".card__like-amount");
   if (evt.target.classList.contains("card__like-button_is-active")) {
     deleteLikeCard(userId)
       .then((res) => {
