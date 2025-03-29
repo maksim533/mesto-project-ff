@@ -120,9 +120,9 @@ const clearValidation = (formSelection, config) => {
   const inputList = Array.from(
     formSelection.querySelectorAll(config.inputSelector)
   );
-  const buttonElement = formSelection.querySelector(config.submitButtonSelector)
-
-  toggleButtonState(inputList, buttonElement, config.inactiveButtonClass);
+  const buttonElement = formSelection.querySelector(config.submitButtonSelector);
+  
+  disableSubmitButton(buttonElement, config.inactiveButtonClass);
 
   inputList.forEach((inputElement) => {
     hideErrorMessage(
